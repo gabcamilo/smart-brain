@@ -5,6 +5,7 @@ import Logo from '../components/Logo/Logo';
 import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
 import Rank from '../components/Rank/Rank';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
+import SignIn from '../components/SignIn/SignIn';
 import Particles from 'react-particles-js';
 import Clarifai from 'clarifai';
 
@@ -19,7 +20,8 @@ constructor(){
   this.state = {
     input:'',
     imageUrl:'',
-    box:{}
+    box:{},
+    route: 'signin'
   }
 }
 
@@ -64,24 +66,33 @@ constructor(){
         return box;
       }).then((box)=>{
         this.displayFaceBox(box);
-
       })
       .catch(err =>{ 
         alert('Invalid image!');
-        this.setState({input: '', imageUrl: ''});
+        this.setState({input: '', imageUrl: '', box: {}});
         console.log(err);
       });
     
+  }
+
+  onRouteChange = (route) =>{
+    this.setState({route: route});
   }
   render(){
     return (
     <div className="App">
       <Particles params={this.particlesOptions} className='particles'/>
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
-        <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
+      <Navigation onRouteChange={this.onRouteChange}/>
+      {
+        this.state.route ==='signin'?
+          <SignIn onRouteChange={this.onRouteChange}/>
+          : <div>
+              <Logo />
+              <Rank />
+              <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
+              <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
+          </div>
+      }
     </div>
     );
   }
