@@ -5,7 +5,8 @@ import Logo from '../components/Logo/Logo';
 import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
 import Rank from '../components/Rank/Rank';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
-import SignIn from '../components/SignIn/SignIn';
+import Login from '../components/Login/Login';
+import Register from '../components/Register/Register';
 import Particles from 'react-particles-js';
 import Clarifai from 'clarifai';
 
@@ -21,7 +22,8 @@ constructor(){
     input:'',
     imageUrl:'',
     box:{},
-    route: 'signin'
+    route: 'login',
+    isSignedin: false
   }
 }
 
@@ -76,22 +78,39 @@ constructor(){
   }
 
   onRouteChange = (route) =>{
+    switch (route) {
+      case 'register':
+        this.setState({isSignedIn: false});  
+        break;
+      case 'login':
+        this.setState({isSignedIn: false});  
+        break;
+      default:
+          this.setState({isSignedIn: true});  
+        break;
+    }
+    this.setState({input: ''});
     this.setState({route: route});
   }
   render(){
+    const {isSignedIn, route, imageUrl, box} = this.state;
     return (
     <div className="App">
       <Particles params={this.particlesOptions} className='particles'/>
-      <Navigation onRouteChange={this.onRouteChange}/>
+      <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
       {
-        this.state.route ==='signin'?
-          <SignIn onRouteChange={this.onRouteChange}/>
-          : <div>
+        route ==='login'?
+          <Login onRouteChange={this.onRouteChange}/>
+          : 
+          route ==='register'?
+            <Register onRouteChange={this.onRouteChange}/>
+            :
+            <div>
               <Logo />
               <Rank />
               <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
-              <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
-          </div>
+              <FaceRecognition imageUrl={imageUrl} box={box}/>
+            </div>
       }
     </div>
     );
