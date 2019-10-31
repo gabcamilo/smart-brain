@@ -1,10 +1,10 @@
 import React from 'react';
-import Tilt from 'react-tilt';
 import emptyImage from './empty.png';
+import './FaceRecognition.css';
 
 
-const FaceRecognition = ({imageUrl}) =>{
-
+const FaceRecognition = ({imageUrl, box}) =>{
+	const {leftCol, topRow, rightCol, bottomRow} = box;
 	if(!imageUrl){
 		imageUrl=emptyImage;
 	}
@@ -12,7 +12,8 @@ const FaceRecognition = ({imageUrl}) =>{
 	return(
 		<div className='center ma'>
 			<div className='absolute mt2'>
-				<img src={imageUrl} alt="tested image" width='500px' height='auto'/>
+				<img id="inputImage" src={imageUrl} alt="" width='500px' height='auto'/>
+				<div className='bounding-box' style={{top: topRow, right: rightCol, left: leftCol, bottom: bottomRow}}></div>
 			</div>
 		</div>
 	)
@@ -20,4 +21,4 @@ const FaceRecognition = ({imageUrl}) =>{
 
 export default FaceRecognition;
 
- 
+			
